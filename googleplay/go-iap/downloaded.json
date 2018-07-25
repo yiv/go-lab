@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "teenpattidaily",
+  "private_key_id": "34fc44c4712df2feabdf1841780eb7ecf18c6cab",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQDI54wHiitbntpc\neEcSll7AIbzPaBE5y3bJkvsJPyc2HKz9pqJiyI1pkdxSCyJkQ5jnZB+5vIwczO8Z\nS3jJf+JlYQL7Ex4smGN0mYoADVl9FNsijpX6TirF0uSjTaBQXncHCvJUlgjpfnQR\nNwpSaeIMMjqBXBc3qVe++VgGg3e+soR5hdMjBpvrnTtZm0ah75pqRUdKRPmNyg1e\n92AIPb+17pNjplOBqotTAEeQk99CwNtoFpE9Kw10fYVMV/Q3ZT5TYZVgrTI/Xa79\njvdfU7xpTZiuanWo9WwiApJKToxWl1Jhu7rbm+hK1bAorVnnq1W0gByWl8rA4cBc\nX0FM22UBAgMBAAECggEAAr+icNu+dABFTtkc2uwUEMZMf5lAt/elQOTZKrXw3XK2\nNStJgR4j2ZXXODIg6X2yJlUpD/RnPowSGZFv0al3S0s3+n+3LndXesSCUaeHxIEm\nQ3UL0pE7iZL8HFllXHl0mcIfFLmBbAqWIAmAdSZMP8wiH1SctO0vkPfMcRyX5RPP\nYGDK3IZ2nkJ2hHt+AzO30le9SSt8XDaUCHJDWelo1jUjsiGtS0jURhH7nSwLPKis\noy0OxTehmxtDLOqFs4Y2N+45R6hyXux5GyKXnn1YdaKsKFyAsqSTTz645CqnRDZi\nhDty2MGVjx5bbz++0Px5CVZIz813Q3gxXxbw/SKmiQKBgQD28p0dWBMSnt2sngJq\nayNeVw31NP9VHwdBWY9Ayrcdzpc7kWH/RFxmYCBhLr27fpL4sRPATHchEHLVG2vR\nDAEfhSTV1ytX4QOiwnTNPhNSeb7BJEc8KOs6C68sHWQVPfyV3ZrxG1AFK47kLRQf\nclBfCV6iRXvcwl90Xj4CPC4A1QKBgQDQRNuyvGBbjZHb1rPsLe2uaIV8DHRVAFyb\nGFdJXjT3YiMi7ED4vdE6kN4+yRoWbohn56b5NxRqgbW+t63D84iMyQDfKxwrCHiG\nxGV4GdaUc68iDPBmroRxffnlvT/GfjTJwmWrwr46IcJVELkj6mIkhFXcIUjdPwyA\ngtbAPaeJfQKBgGUEoCLV2Y9/b1zikkhoJWK9J9eL43s1oykncsNlaX0G+rSCZ10d\n4NJ8NiKrFTAyufqDrXm3je/3o5HrkrJEP91eANB9IZzkTjFxbIhdAVh2twKZTY6d\nioQHLZRVPZC297FyoqRIsPY8eEp86kNm5tvJoG2vENkgph2bQ7B0X7k1AoGBAIFl\nptJf88YuKSdbOCJPTtMDoZu26Tg+p0q9Ts4IuAPTd10lSCDDXpFynIKJ06mINzvH\nU5iXPhoGSPMbj9ylHHvMDryZPkEGXEvvDdQWyZkmXvNa8qn5V9RjnrW8ZTlgBFAu\ndZjHwATCIMlVQJIt95gUmHvSOkEsAQp/QAnkxIjJAoGAQIwJhyXTYBnCD/mgDzGN\nPq9QnCBwQJvtaFM7LcqsLBnHXhymHfqkFs6c6faHp90b7v4uUhO0VVltgx8MGpde\nNwcbLIwtwadgjuKqz4+mFfiQK006w/s32cQpiQPNib3FnajSd8Idav+oGU5ixUPK\nKV3grzZKTcuvV4CPblxFaho=\n-----END PRIVATE KEY-----\n",
+  "client_email": "gp-billing-verify@teenpattidaily.iam.gserviceaccount.com",
+  "client_id": "117275495357169562824",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://accounts.google.com/o/oauth2/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/gp-billing-verify%40teenpattidaily.iam.gserviceaccount.com"
+}

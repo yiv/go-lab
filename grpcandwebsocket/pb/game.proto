@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+package pb;
+
+service GMService {
+    rpc Stream (stream Frame) returns (stream Frame); // 透传消息, 双向流
+}
+//双向流包
+message Frame {
+    bytes payload = 1;
+}
+
+

@@ -1,0 +1,10 @@
+syntax = "proto3";
+package pb;
+// The Uc service definition.
+service Uc {
+ rpc GDeviceID (GDeviceIDRequest) returns (GDeviceIDReply) {}
+}
+message GDeviceIDRequest {
+}
+message GDeviceIDReply {
+}

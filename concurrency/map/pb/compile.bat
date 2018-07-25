@@ -1,0 +1,1 @@
+protoc uc.proto --go_out=plugins=grpc:.

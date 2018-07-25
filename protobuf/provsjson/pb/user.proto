@@ -1,0 +1,31 @@
+syntax = "proto3";
+
+package pb;
+
+message UserInfo {
+    int64 uid = 1;
+    string unionid = 2;
+    string uuid = 3;
+    string username = 4;
+    string password = 5;
+    string nick = 6;
+    bool gender = 7;
+    string addr = 8;
+    string avatar = 9;
+    bool isguest = 10;
+    int32 condays = 11;
+    int64 signdate = 12;
+    int64 vipsigndate = 13;
+    bool status = 14;
+    int64 mtime = 15;
+    int64 ctime = 16;
+    string token = 17;
+    string bankpwd = 18;
+    string forbid = 19;
+    string imsi = 20;
+    string imei = 21;
+    string mac = 22;
+    string did = 23;
+    string psystem = 24;
+    string pmodel = 25;
+}

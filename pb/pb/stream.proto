@@ -1,0 +1,10 @@
+syntax = "proto3";
+
+package pb;
+
+service User {
+    rpc SaveBank(stream EmptyRes) returns (stream EmptyRes) {}
+}
+
+message EmptyRes {
+}

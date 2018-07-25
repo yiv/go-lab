@@ -1,0 +1,1 @@
+protoc route_guide.proto --go_out=plugins=grpc:.

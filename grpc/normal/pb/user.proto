@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package routeguide;
+
+service User {
+    rpc GetUserInfo(Req)  returns (Res) {}
+}
+
+
+message Req {
+    int64 uid = 1;
+}
+
+message Res {
+    string nick = 1;
+}

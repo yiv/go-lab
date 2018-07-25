@@ -1,0 +1,30 @@
+{
+    "DeviceInfoCache": {
+        "key": "DeviceInfo_",
+        "expires": 3600
+    },
+    "HomeInfoCache": {
+        "key": "HomeInfo_",
+        "expires": 3600
+    },
+    "DeviceLatchCache": {
+        "key": "DeviceLatchCache_",
+        "expires": 3600
+    },
+    "deviceSendSMSCache": {
+        "key": "DeviceSendSMSCache_",
+        "expires": 900
+    },
+    "smsFrequencyCache": {
+        "key": "DeviceSendSMSCache_",
+        "expires": 900
+    },
+     "UserInfoCache": {
+        "key": "UserInfo_",
+        "expires": 3600
+    },
+    "ProductInfoCache": {
+        "key": "ProductInfo_",
+        "expires": 3600
+    }
+}

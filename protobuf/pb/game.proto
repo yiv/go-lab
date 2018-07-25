@@ -1,0 +1,76 @@
+syntax = "proto3";
+
+package pb;
+
+service GameService {
+    rpc Stream (stream Frame) returns (stream Frame); // 透传消息, 双向流
+}
+//双向流包
+message Frame {
+    bytes Payload = 1;
+}
+//双向流请求包
+message EnterTableReq {
+    string Token = 1;
+    int32 RoomClass = 2;
+}
+message SitdownReq {
+    int32 Seat = 1;
+}
+message BetReq {
+    int64 Coins = 1;
+}
+message DuelReq {
+    int64 Rival = 1;
+}
+//双向流返回包
+message ErrRes {
+    int32 Err = 1;
+}
+message Player {
+    int64 Id = 1;
+    int32 SeatCode = 2;
+    bool Blind = 3;
+    int32 Seat = 4;
+    int64 Coin = 5;
+    string Nick = 6;
+    string Avatar = 7;
+    bytes Cards = 8;
+}
+message PlayerID {
+    int64 Id = 1;
+}
+message Table {
+    int32 TableId = 1;
+    int32 CallSeat = 2;
+    int32 BankerSeat = 3;
+    int64 Jackpot = 4;
+    int32 Round = 5;
+    int64 RoundBet = 6;
+    int32 Status = 7;
+    repeated Player players = 8;
+}
+message Cards {
+    bytes Cards = 1;
+}
+message PlayerSeat {
+    int64 Id = 1;
+    int32 Seat = 2;
+}
+message Seat {
+    int32 Seat = 1;
+}
+message Duel {
+    int32 FromSeat = 1;
+    int32 ToSeat = 2;
+}
+message Bet {
+    int32 Seat = 1;
+    int64 Coins = 2;
+}
+message DuelResult {
+    int32 FromSeat = 1;
+    int32 ToSeat = 2;
+    int32 WinSeat = 3;
+}
+

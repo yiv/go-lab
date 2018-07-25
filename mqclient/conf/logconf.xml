@@ -1,0 +1,9 @@
+<seelog type="asynctimer" asyncinterval="1000" minlevel="debug" maxlevel="error">
+    <outputs formatid="logformat">
+        <!-- <console/> -->
+        <rollingfile formatid="logformat" type="size" filename="/data/www/logs/css_log/data-analyzer-logs/root.log" maxsize="1000000" maxrolls="10" />
+    </outputs>
+    <formats>
+        <format id="logformat" format="%Date %Time %Ns [%LEV] %RelFile %Func %Msg%n"/>
+    </formats>
+</seelog>

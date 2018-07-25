@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+
+package pb;
+
+service Game {
+    rpc Stream (stream Message) returns (stream Message) {
+    }
+}
+
+message Message {
+    string body = 1;
+}

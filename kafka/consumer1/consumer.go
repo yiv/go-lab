@@ -12,7 +12,7 @@ import (
 func main() {
 	fmt.Println("edwin #0 ")
 
-	consumer, err := sarama.NewConsumer([]string{"192.168.1.205:9092"}, nil)
+	consumer, err := sarama.NewConsumer([]string{"192.168.1.205:30092"}, nil)
 	if err != nil {
 		panic(err)
 	}
@@ -40,7 +40,7 @@ func main() {
 
 	fmt.Println("edwin #2 ")
 
-	partitionConsumer, err := consumer.ConsumePartition("EventCreatePattiRobot", 0, sarama.OffsetNewest)
+	partitionConsumer, err := consumer.ConsumePartition("test", 0, sarama.OffsetNewest)
 	if err != nil {
 		panic(err)
 	}

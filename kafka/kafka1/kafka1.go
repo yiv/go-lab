@@ -21,7 +21,7 @@ func main() {
 
 	fmt.Println("edwin #0")
 
-	producer, err := sarama.NewAsyncProducer([]string{"goamagic.in:9092"}, nil)
+	producer, err := sarama.NewAsyncProducer([]string{"192.168.1.205:19092"}, nil)
 	if err != nil {
 		panic(err)
 	}
@@ -41,7 +41,7 @@ func main() {
 	go func() {
 		for {
 			select {
-			case producer.Input() <- &sarama.ProducerMessage{Topic: "my_topic", Partition: 0, Key: nil, Value: sarama.StringEncoder("testing 123")}:
+			case producer.Input() <- &sarama.ProducerMessage{Topic: "test", Partition: 0, Key: nil, Value: sarama.StringEncoder("testing 123")}:
 				enqueued++
 				fmt.Println("edwin #4")
 				time.Sleep(1 * time.Second)

@@ -13,8 +13,9 @@ import (
 	"github.com/go-kit/kit/log"
 )
 
-var addr = flag.String("addr", "192.168.1.12:10050", "http service address")
+var addr = flag.String("addr", "192.168.1.12:999", "http service address")
 var logger log.Logger
+var sum int
 
 func main() {
 	flag.Parse()
@@ -26,27 +27,29 @@ func main() {
 	wg := sync.WaitGroup{}
 	// Mechanical domain.
 	now := time.Now()
-	for i := 0; i < 5000; i++ {
+	for i := 0; i < 20000; i++ {
 		wg.Add(1)
 		go func() {
 			defer wg.Done()
-			client()
+			client(i)
 		}()
 	}
 
 	wg.Wait()
-	level.Info(logger).Log("took ", time.Now().Sub(now))
+	level.Info(logger).Log("sum", sum, "took ", time.Now().Sub(now))
 }
 
-func client() {
+func client(id int) {
 	wg := sync.WaitGroup{}
 	u := url.URL{Scheme: "ws", Host: *addr, Path: "/ws"}
 	c, _, err := websocket.DefaultDialer.Dial(u.String(), nil)
 	if err != nil {
-		level.Error(logger).Log("err ", err.Error())
+		level.Error(logger).Log("id", id, "err ", err.Error())
 		return
 	}
 	ctx, cancel := context.WithCancel(context.Background())
+	count := 0
+
 	wg.Add(1)
 	go func() {
 		defer wg.Done()
@@ -56,9 +59,10 @@ func client() {
 				return
 			default:
 				time.Sleep(time.Second)
+				c.SetWriteDeadline(time.Now().Add(time.Second * 10))
 				err = c.WriteMessage(websocket.TextMessage, []byte("hello"))
 				if err != nil {
-					level.Error(logger).Log("err ", err.Error())
+					//level.Error(logger).Log("id", id, "err ", err.Error())
 					return
 				}
 				//time.Sleep(time.Second)
@@ -70,28 +74,35 @@ func client() {
 	wg.Add(1)
 	go func() {
 		defer func() {
-			c.Close()
 			wg.Done()
 		}()
-		count := 0
+
 		for {
 			select {
 			case <-ctx.Done():
 				return
 			default:
+				c.SetReadDeadline(time.Now().Add(time.Second * 10))
 				_, _, err := c.ReadMessage()
 				if err != nil {
-					level.Error(logger).Log("err ", err.Error())
+					level.Error(logger).Log("id", id, "err ", err.Error())
+					return
+				}
+				if count > 10 {
+					cancel()
 					return
 				}
 				count++
-				if count > 10000 {
-					cancel()
-					level.Info(logger).Log("done ", count)
-					return
-				}
+				sum++
 			}
 		}
 	}()
+
 	wg.Wait()
+
+	c.SetWriteDeadline(time.Now().Add(time.Second * 10))
+	c.WriteMessage(websocket.CloseMessage, websocket.FormatCloseMessage(websocket.CloseNormalClosure, ""))
+	time.Sleep(time.Second * 10)
+	c.Close()
+	level.Info(logger).Log("id", id, "done ", count)
 }

@@ -17,7 +17,7 @@ func main() {
 }
 func multiStream() {
 	var pool []pb.GameClient
-	for m := 0; m < 100; m++ {
+	for m := 0; m < 10; m++ {
 		conn, err := grpc.Dial(":7788", grpc.WithInsecure())
 		if err != nil {
 			log.Fatalf("fail to dial: %v", err)
@@ -30,7 +30,7 @@ func multiStream() {
 
 	now := time.Now()
 	rand.Seed(time.Now().UnixNano())
-	for i := 0; i < 5000; i++ {
+	for i := 0; i < 500; i++ {
 		wg.Add(1)
 		go func() {
 			defer wg.Done()

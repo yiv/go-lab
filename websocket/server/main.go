@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"flag"
 	"fmt"
 	//"io/ioutil"
@@ -18,6 +19,11 @@ import (
 var (
 	webSocketAddr = flag.String("websocket.addr", ":10050", "game agent webSocket address")
 )
+
+type Message struct {
+	MType   int
+	Content []byte
+}
 
 func main() {
 	flag.Parse()
@@ -45,19 +51,40 @@ func webSocketServerStd(w http.ResponseWriter, r *http.Request) {
 		fmt.Print("upgrade:", err)
 		return
 	}
-	for {
-		mt, message, err := c.ReadMessage()
-		if err != nil {
-			fmt.Println("read:", err)
-			break
+
+	ctx, cancel := context.WithCancel(context.Background())
+	buf := make(chan Message, 10000)
+	go func() {
+		for {
+			select {
+			case <-ctx.Done():
+				return
+			default:
+				mt, message, err := c.ReadMessage()
+				if err != nil {
+					fmt.Println("read:", err)
+					cancel()
+					return
+				}
+				buf <- Message{MType: mt, Content: message}
+			}
 		}
-		//fmt.Printf("recv: %s", message)
-		err = c.WriteMessage(mt, message)
-		if err != nil {
-			fmt.Println("write:", err)
-			break
+	}()
+
+	go func() {
+		for {
+			select {
+			case <-ctx.Done():
+				return
+			case msg := <-buf:
+				err = c.WriteMessage(msg.MType, msg.Content)
+				if err != nil {
+					fmt.Println("write:", err)
+					return
+				}
+			}
 		}
-	}
+	}()
 }
 
 //func webSocketServer(w http.ResponseWriter, r *http.Request) {

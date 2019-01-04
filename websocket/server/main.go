@@ -12,8 +12,7 @@ import (
 	//"time"
 
 	ws "github.com/gorilla/websocket"
-
-	"git.ifunbow.com/tpserver/gameagent/websocket"
+	//"zycase.cn/shaoyong/wechat/agent/websocket"
 )
 
 var (
@@ -32,11 +31,12 @@ func main() {
 	}()
 	go func() {
 		m := http.NewServeMux()
-		m.HandleFunc("/ws", webSocketServer)
+		m.HandleFunc("/ws", webSocketServerStd)
 		errc <- http.ListenAndServe(*webSocketAddr, m)
 	}()
 	fmt.Println("terminated", <-errc)
 }
+
 func webSocketServerStd(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("webSocketServerStd new client")
 	var upgrader = ws.Upgrader{} // use default options
@@ -51,7 +51,7 @@ func webSocketServerStd(w http.ResponseWriter, r *http.Request) {
 			fmt.Println("read:", err)
 			break
 		}
-		fmt.Printf("recv: %s", message)
+		//fmt.Printf("recv: %s", message)
 		err = c.WriteMessage(mt, message)
 		if err != nil {
 			fmt.Println("write:", err)
@@ -59,25 +59,26 @@ func webSocketServerStd(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 }
-func webSocketServer(w http.ResponseWriter, r *http.Request) {
-	fmt.Println("webSocketServer new client")
-	conn, err := websocket.NewWebsocketServerConn(w, r)
-	if err != nil {
-		return
-	}
-	//conn.SetReadDeadline(time.Now().Add(15 * time.Second))
-	for {
-		//bytes, err := ioutil.ReadAll(conn)
 
-		buf := make([]byte, 20)
-
-		n, err := conn.Read(buf)
-		if err != nil {
-			fmt.Println("webSocket read err ", err)
-			return
-		}
-		fmt.Printf("webSocket read  %d byte, buf = %v", n, buf)
-		conn.Write([]byte("hello "))
-	}
-
-}
+//func webSocketServer(w http.ResponseWriter, r *http.Request) {
+//	fmt.Println("webSocketServer new client")
+//	conn, err := websocket.NewWebsocketServerConn(w, r)
+//	if err != nil {
+//		return
+//	}
+//	//conn.SetReadDeadline(time.Now().Add(15 * time.Second))
+//	for {
+//		//bytes, err := ioutil.ReadAll(conn)
+//
+//		buf := make([]byte, 20)
+//
+//		n, err := conn.Read(buf)
+//		if err != nil {
+//			fmt.Println("webSocket read err ", err)
+//			return
+//		}
+//		fmt.Printf("webSocket read  %d byte, buf = %v", n, buf)
+//		conn.Write([]byte("hello "))
+//	}
+//
+//}

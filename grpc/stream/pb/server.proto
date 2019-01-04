@@ -4,10 +4,17 @@ syntax = "proto3";
 package pb;
 
 service Game {
-    rpc Stream (stream Message) returns (stream Message) {
+    rpc Stream (stream Frame) returns (stream Frame) {
     }
 }
 
-message Message {
-    string body = 1;
+message Frame {
+    bytes payload = 1;
+}
+
+message UpdateNetReq {
+    int32 delay = 1;
+}
+message UpdateNetRes {
+    int32 code = 1;
 }

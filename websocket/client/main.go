@@ -1,61 +1,86 @@
 package main
 
 import (
+	"context"
 	"flag"
-	"fmt"
+	"github.com/gorilla/websocket"
 	"log"
 	"net/url"
-	"os"
-	"os/signal"
-	"syscall"
+	"sync"
 	"time"
-
-	"github.com/gorilla/websocket"
 )
 
-var addr = flag.String("addr", "192.168.1.51:10050", "http service address")
+var addr = flag.String("addr", ":10050", "http service address")
 
 func main() {
 	flag.Parse()
-
+	wg := sync.WaitGroup{}
 	// Mechanical domain.
-	errc := make(chan error)
-	// Interrupt handler.
-	go func() {
-		c := make(chan os.Signal)
-		signal.Notify(c, syscall.SIGINT, syscall.SIGTERM)
-		errc <- fmt.Errorf("%s", <-c)
-	}()
+	now := time.Now()
+	for i := 0; i < 500; i++ {
+		wg.Add(1)
+		go func() {
+			defer wg.Done()
+			client()
+		}()
+	}
 
+	wg.Wait()
+	log.Println("took: ", time.Now().Sub(now))
+
+}
+
+func client() {
+	wg := sync.WaitGroup{}
 	u := url.URL{Scheme: "ws", Host: *addr, Path: "/ws"}
-	log.Printf("connecting to %s", u.String())
 	c, _, err := websocket.DefaultDialer.Dial(u.String(), nil)
 	if err != nil {
 		log.Fatal("dial:", err)
 	}
+	ctx, cancel := context.WithCancel(context.Background())
+	wg.Add(1)
 	go func() {
+		defer wg.Done()
 		for {
-			err = c.WriteMessage(websocket.TextMessage, []byte("hello"))
-			if err != nil {
-				log.Println("write err:", err)
+			select {
+			case <-ctx.Done():
 				return
+			default:
+				err = c.WriteMessage(websocket.TextMessage, []byte("hello"))
+				if err != nil {
+					log.Println("write err:", err)
+					return
+				}
 			}
-			log.Println("write.....")
-			time.Sleep(1 * time.Second)
-			break
-		}
-	}()
-	go func() {
-		defer c.Close()
-		for {
-			_, message, err := c.ReadMessage()
-			if err != nil {
-				log.Println("read:", err)
-				return
-			}
-			log.Printf("recv: %s", message)
+
 		}
 	}()
 
-	log.Println("terminated", <-errc)
+	wg.Add(1)
+	go func() {
+		defer func() {
+			c.Close()
+			wg.Done()
+		}()
+		count := 0
+		for {
+			select {
+			case <-ctx.Done():
+				return
+			default:
+				_, _, err := c.ReadMessage()
+				if err != nil {
+					log.Println("read:", err)
+					return
+				}
+				count++
+				if count > 10000 {
+					cancel()
+					log.Println("read: ", count)
+					return
+				}
+			}
+		}
+	}()
+	wg.Wait()
 }

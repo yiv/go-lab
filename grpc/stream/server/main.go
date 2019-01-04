@@ -7,7 +7,7 @@ import (
 	log "github.com/sirupsen/logrus"
 	"google.golang.org/grpc"
 
-	"../pb"
+	"github.com/yiv/go-lab/grpc/stream/pb"
 )
 
 type server struct {
@@ -18,20 +18,15 @@ func (s *server) Stream(stream pb.Game_StreamServer) error {
 	defer func(begin time.Time) {
 		log.Info("all done, took: ", time.Since(begin))
 	}(time.Now())
-	count := 0
+
 	for {
 		f, e := stream.Recv()
-		log.Info("stream recv")
+		//log.Info("stream recv")
 		if e != nil {
 			log.Error("err on recv stream: ", e)
 			return e
 		}
 		stream.Send(f)
-		log.Info("send out")
-		count++
-		if count >= 100000 {
-			break
-		}
 	}
 	return nil
 }
@@ -40,7 +35,7 @@ func main() {
 	if err != nil {
 		log.Fatalf("failed to listen: %v", err)
 	}
-	grpcServer := grpc.NewServer()
+	grpcServer := grpc.NewServer(grpc.MaxConcurrentStreams(50000))
 	grpcHandler := new(server)
 	pb.RegisterGameServer(grpcServer, grpcHandler)
 	grpcServer.Serve(lis)

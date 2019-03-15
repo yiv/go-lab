@@ -9,12 +9,12 @@ import (
 )
 
 var (
-	agentAddr string = "192.168.1.51:7788"
+	agentAddr = "192.168.1.12:10050"
 )
 
 type client struct {
 	sk        *websocket.Conn
-	uid       int64
+	uid       string
 	token     string
 	roomClass int32
 	seat      int32
@@ -23,7 +23,7 @@ type client struct {
 func newClient() (c *client) {
 	c = &client{
 		sk:  newWebSocket(),
-		uid: 555,
+		uid: "55852618-040c-425c-b4e9-97fb16f55730",
 	}
 	return
 }
@@ -59,7 +59,7 @@ func (c *client) send() {
 }
 
 func newWebSocket() *websocket.Conn {
-	u := url.URL{Scheme: "ws", Host: agentAddr, Path: "/"}
+	u := url.URL{Scheme: "ws", Host: agentAddr, Path: "/ws"}
 	log.Printf("connecting to %s", u.String())
 	c, _, err := websocket.DefaultDialer.Dial(u.String(), nil)
 	if err != nil {

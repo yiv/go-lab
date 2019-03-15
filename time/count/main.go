@@ -7,4 +7,5 @@ import (
 
 func main() {
 	unixNow := time.Now().Unix()
+	fmt.Println(unixNow)
 }

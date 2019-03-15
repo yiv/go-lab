@@ -1,7 +1,9 @@
 package main
 
 import (
+	"context"
 	"net"
+	"sync"
 	"time"
 
 	log "github.com/sirupsen/logrus"
@@ -13,22 +15,50 @@ import (
 type server struct {
 }
 
-func (s *server) Stream(stream pb.Game_StreamServer) error {
+func (s *server) Stream(stream pb.Game_StreamServer) (err error) {
 	log.Info("new stream")
 	defer func(begin time.Time) {
 		log.Info("all done, took: ", time.Since(begin))
 	}(time.Now())
+	buf := make(chan *pb.Frame, 5000)
+	ctx, cancel := context.WithCancel(context.Background())
+	wg := sync.WaitGroup{}
 
-	for {
-		f, e := stream.Recv()
-		//log.Info("stream recv")
-		if e != nil {
-			log.Error("err on recv stream: ", e)
-			return e
+	wg.Add(1)
+	go func() {
+		defer wg.Done()
+		for {
+			select {
+			case <-ctx.Done():
+				return
+			default:
+				f, e := stream.Recv()
+				if e != nil {
+					err = e
+					cancel()
+					log.Error("err on recv stream: ", e)
+					return
+				}
+				buf <- f
+			}
 		}
-		stream.Send(f)
-	}
-	return nil
+	}()
+
+	wg.Add(1)
+	go func() {
+		defer wg.Done()
+		for {
+			select {
+			case <-ctx.Done():
+				return
+			case f := <-buf:
+				stream.Send(f)
+			}
+		}
+	}()
+
+	wg.Wait()
+	return
 }
 func main() {
 	lis, err := net.Listen("tcp", ":7788")

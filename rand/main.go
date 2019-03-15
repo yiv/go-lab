@@ -1,28 +1,18 @@
 package main
 
 import (
+	crand "crypto/rand"
 	"fmt"
+	"math/big"
 	mrand "math/rand"
 	"time"
-	crand "crypto/rand"
-	"math/big"
 )
 
 func main() {
-	fmt.Println("rand number from crypto rand")
-	for i := 0; i < 10; i ++ {
-		cryptoRand()
-	}
-	fmt.Println("rand number from crypto rand")
-
-	fmt.Println("rand number from math rand")
-	mrand.Seed(time.Now().UnixNano())
-	mathRand()
-	fmt.Println("rand number from math rand")
-
+	RandUid()
 }
 
-func cryptoRand()  {
+func cryptoRand() {
 	nBig, err := crand.Int(crand.Reader, big.NewInt(10))
 	if err != nil {
 		panic(err)
@@ -32,8 +22,27 @@ func cryptoRand()  {
 
 }
 
-func mathRand()  {
-	for i := 0; i < 100; i ++{
+func mathRand() {
+	for i := 0; i < 100; i ++ {
 		fmt.Printf("%d\t", mrand.Intn(2))
 	}
+}
+
+func mathRandPrintSeed() {
+	for i := 0; i < 10; i ++ {
+		seed := time.Now().UnixNano()
+		mrand.Seed(seed)
+		fmt.Printf("seed %v , %d\n", seed, mrand.Intn(100))
+	}
+}
+
+func RandUid() {
+	mrand.Seed(time.Now().UnixNano())
+	//var uids string
+	for i := 0; i < 973; i++ {
+		r := mrand.Int31n(100000000) + 900000000
+		uid := fmt.Sprintf(`"%v"`, r)
+		fmt.Println(uid)
+	}
+
 }

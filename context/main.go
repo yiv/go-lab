@@ -8,7 +8,7 @@ import (
 )
 
 func main() {
-	WithCancel()
+	WithTimeOut()
 }
 
 func WithTimeOut() {
@@ -18,7 +18,12 @@ func WithTimeOut() {
 		for {
 			select {
 			case <-ctx.Done():
-				fmt.Println("work #", id, " done ", ctx.Err())
+
+				if ctx.Err() == context.DeadlineExceeded {
+					fmt.Println("work #", id, "DeadlineExceeded", ctx.Err())
+				}else{
+					fmt.Println("work #", id, "Done", ctx.Err())
+				}
 				return
 			default:
 				fmt.Println("work #", id)
@@ -31,6 +36,10 @@ func WithTimeOut() {
 	ctx, _ := context.WithTimeout(context.Background(), time.Second*5)
 	wg.Add(1)
 	go work(ctx, 0, wg)
+
+	//<- time.After(time.Second * 4)
+	//cancel()
+	//
 	wg.Wait()
 
 }

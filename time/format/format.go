@@ -6,7 +6,8 @@ import (
 )
 
 func main() {
-	TimePrint()
+	//TimePrint()
+	fmt.Println(time.Now().Unix() - int64((time.Hour * 24 * 7).Seconds()))
 }
 
 func StringToTime()  {

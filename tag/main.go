@@ -24,7 +24,6 @@ func main() {
 		fmt.Printf("edwin #21 %v \n", string(j))
 	}
 
-	//IterateStructField()
 }
 
 func ExtractByTag(obj interface{}, tagName string) (res map[string]interface{}, err error) {

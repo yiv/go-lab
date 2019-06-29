@@ -2,17 +2,24 @@ package main
 
 import (
 	"fmt"
-	"golang.org/x/net/context"
-	"time"
+	"reflect"
 )
 
 func main() {
+	type User struct {
+		Name  string
+		Age   int32
+		Label []string
+	}
 
-	ctx, _ := context.WithTimeout(context.Background(), 100*time.Millisecond)
-	select {
-	case <-time.After(200 * time.Millisecond):
-		fmt.Println("overslept")
-	case <-ctx.Done():
-		fmt.Println(ctx.Err()) // prints "context deadline exceeded"
+	NilTest(User{Name: "nick"})
+
+}
+func NilTest(param interface{}) {
+	fmt.Println(reflect.TypeOf(param))
+	//typ := reflect.TypeOf(param)
+	value := reflect.ValueOf(param)
+	for i := 0; i < value.NumField(); i++ {
+		fmt.Println(value.Field(i).Kind())
 	}
 }

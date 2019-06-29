@@ -8,6 +8,7 @@ import (
 func main() {
 	js2structWithinMap()
 }
+
 func js2structWithinMap() {
 	type loginGuestReq struct {
 		Did     string           `json:"did"`

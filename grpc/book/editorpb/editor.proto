@@ -1,0 +1,170 @@
+syntax = "proto3";
+package editorpb;
+// The Ac service definition.
+service Editor {
+    rpc Characters (CharactersReq) returns (CharactersRes) {
+    }
+    rpc EditProfile (EditProfileReq) returns (EditProfileRes) {
+    }
+}
+
+
+message AppUserInfo {
+    int64 ID = 1;
+    int64 UserID = 2;
+    string NickName = 3;
+    string Desc = 4;
+    string Email = 5;
+    int32 Gender = 6;
+    int32 Age = 7;
+    string Avatar = 8;
+    string BgImg = 9;
+    string Signature = 10;
+    string Birthday = 11;
+    string Nation = 12;
+    string Province = 13;
+    string City = 14;
+    string County = 15;
+    string Location = 16;
+    int32 RegIP = 17;
+    int32 Created = 18;
+    int32 Updated = 19;
+}
+
+message EditProfileReq {
+    int64 Uid = 1;
+    repeated string Fields = 2;
+    AppUserInfo Profile = 3;
+}
+
+message EditProfileRes {
+    string Err = 1;
+}
+
+message AppEditorCharacter {
+    int32 Id = 1;
+    int64 BookId = 2;
+    string NickName = 3;
+    int32 CharacterType = 4;
+    string Align = 5;
+    string Icon = 6;
+    int32 Created = 7;
+    int32 Updated = 8;
+}
+
+message AppEditorBook {
+    int32 ID = 1;
+    int64 UserID = 2;
+    int64 BookID = 3;
+    string Name = 4;
+    string Desc = 5;
+    string Images = 6;
+    int32 OnlineStatus = 7;
+    int32 WorkStatus = 8;
+    int32 AuthorNum = 9;
+    int32 Created = 10;
+    int32 Updated = 11;
+}
+
+message AppEditorChapter {
+    int32 ID = 1;
+    int64 BookID = 2;
+    string Name = 3;
+    int32 CmdCount = 4;
+    int32 WordsCount = 5;
+    int32 OnlineStatus = 6;
+    int32 Created = 7;
+    int32 Updated = 8;
+}
+
+message EditorBook {
+    AppEditorBook Book = 1;
+    repeated AppEditorChapter Chapters = 2;
+}
+
+message AppEditorCmd {
+    int32 ID = 1;
+    int64 BookID = 2;
+    int64 UserID = 3;
+    int32 ChapterID = 4;
+    string CmdList = 5;
+    int32 Created = 6;
+    int32 Updated = 7;
+}
+
+message CharactersReq {
+    int64 bookId = 1;
+}
+message CharactersRes {
+    repeated AppEditorCharacter data = 1;
+    string err = 15;
+}
+
+message AddCharacterReq {
+    int64 BookId = 1;
+    string Name = 2;
+    string Icon = 3;
+    string Align = 4;
+}
+message AddCharacterRes {
+    int32 Id = 1;
+    string Err = 15;
+}
+message DelCharacterReq {
+    int64 BookId = 1;
+    int32 CharacterId = 2;
+}
+message DelCharacterRes {
+    string Err = 15;
+}
+
+message EditCharacterReq {
+    int64 bookId = 1;
+    int32 characterId = 2;
+    string field = 3;
+    string value = 4;
+}
+message EditCharacterRes {
+    string err = 15;
+}
+message GetBookByIdReq {
+    int64 BookId = 1;
+}
+message GetBookByIdRes {
+    AppEditorBook book = 1;
+    string err = 15;
+}
+message GetChaptersByIdReq {
+    int64 BookId = 1;
+}
+message GetChaptersByIdRes {
+    repeated AppEditorChapter chapters = 1;
+    string err = 2;
+}
+message AddChapterReq {
+    int64 BookId = 1;
+    string ChapterName = 2;
+}
+message AddChapterRes {
+    int32 id = 1;
+    string err = 15;
+}
+message EditChapterReq {
+    int64 bookId = 1;
+    int32 chapterId = 2;
+    string field = 3;
+    string value = 4;
+}
+message EditChapterRes {
+    string err = 15;
+}
+message GetEditorCmdReq {
+    int64 bookId = 1;
+    int32 chapterId = 2;
+}
+message GetEditorCmdRes {
+    AppEditorCmd cmd = 1;
+    string err = 15;
+}
+
+

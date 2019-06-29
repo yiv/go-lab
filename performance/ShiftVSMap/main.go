@@ -1,4 +1,4 @@
-package main
+package ShiftVSMap
 
 import (
 	"fmt"
@@ -20,13 +20,13 @@ func main() {
 func ShiftVSMap() {
 	var card byte = 0x15
 	start := time.Now()
-	for i := 0; i < 10000000; i ++ {
+	for i := 0; i < 10000000; i++ {
 		GetValueByShift(card)
 	}
 	fmt.Println("time used ", time.Now().Sub(start))
 
 	start = time.Now()
-	for i := 0; i < 10000000; i ++ {
+	for i := 0; i < 10000000; i++ {
 		GetValueByMap(card)
 	}
 	fmt.Println("time used ", time.Now().Sub(start))
@@ -40,4 +40,3 @@ func GetValueByMap(card byte) (value byte) {
 	value = Card2Value[card]
 	return
 }
-

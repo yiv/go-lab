@@ -1,19 +1,6 @@
 package main
 
-import "fmt"
-
 func main() {
-
-	code := uint32(15000)
-	//pb := []byte("hello")
-	codebytes := code2bytes(code)
-	fmt.Println(codebytes)
-	c := bytes2code(codebytes)
-	fmt.Println(c)
-
-	long := []byte{1, 2, 3, 4,5,6,7}
-	fmt.Println(long[0:4])
-	fmt.Println(long[4:5])
 
 }
 

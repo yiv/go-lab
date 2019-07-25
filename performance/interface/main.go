@@ -16,9 +16,9 @@ func main() {
 		wg.Add(1)
 		go func() {
 			defer wg.Done()
-			for i := 0; i < 100000000000; i++ {
+			for i := 0; i < 100000000; i++ {
 				data.X = i
-				sum += ByAssert(data)
+				sum += ByStrict(data)
 			}
 		}()
 	}

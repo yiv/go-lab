@@ -29,21 +29,21 @@ type Small struct {
 }
 
 func main() {
-	RenameType()
+	CopyArrayOfStruct()
 }
 
-func RenameType()  {
+func RenameType() {
 	type User1 struct {
-		Uid UserId
-		Friends map[UserId]int32
+		Uid       UserId
+		Friends   map[UserId]int32
 		Relatives map[string]int32
 	}
 	type User2 struct {
-		Uid string
-		Friends map[string]int32
+		Uid       string
+		Friends   map[string]int32
 		Relatives map[string]int32
 	}
-	u1 := &User1{Uid:"edwin", Friends: map[UserId]int32{"nick":30}, Relatives: map[string]int32{"padme":30}}
+	u1 := &User1{Uid: "edwin", Friends: map[UserId]int32{"nick": 30}, Relatives: map[string]int32{"padme": 30}}
 	u2 := &User2{}
 	copier.Copy(u2, u1)
 	fmt.Printf("%#v", u2)
@@ -88,4 +88,23 @@ func Nest3() {
 	var res2 GetLordRecordsRes2
 	copier.Copy(&res2, res)
 	fmt.Println("%v", res2)
+}
+
+func CopyArrayOfStruct() {
+	type IntArray []int
+	type Account struct {
+		Name string
+		Age  int
+		Attr []int
+	}
+	type Account2 struct {
+		Name string
+		Age  int
+		Attr IntArray
+	}
+
+	origin := []Account{{Name: "haha", Age: 5, Attr: IntArray{1, 2, 3}}, {Name: "2222", Age: 5, Attr: IntArray{4, 5, 6}}}
+	var dest []Account2
+	copier.Copy(&dest, &origin)
+	fmt.Println(dest)
 }

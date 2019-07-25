@@ -6,7 +6,7 @@ import (
 )
 
 func main() {
-	js2structWithinMap()
+	NilArray()
 }
 
 func js2structWithinMap() {
@@ -62,4 +62,30 @@ func js2map() {
 	js := `{"aaa":123,"bbb":456}`
 	json.Unmarshal([]byte(js), &m)
 	fmt.Println(m)
+}
+
+func NilArray() {
+	ary := []string{}
+	res := map[string][]string{
+		"empty": ary,
+	}
+
+	r, _ := json.Marshal(res)
+	fmt.Println(string(r))
+
+	type Data struct {
+		Name string
+	}
+	var ary2 []Data
+	//ary2 = make([]Data, 0, 1)
+	ary2 = []Data{}
+
+	res2 := map[string][]Data{
+		"empty": ary2,
+	}
+	r, _ = json.Marshal(res2)
+	fmt.Println(string(r))
+
+	//ary3 := []interface{}{}
+
 }

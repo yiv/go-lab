@@ -2,9 +2,7 @@ syntax = "proto3";
 package editorpb;
 // The Ac service definition.
 service Editor {
-    rpc Characters (CharactersReq) returns (CharactersRes) {
-    }
-    rpc EditProfile (EditProfileReq) returns (EditProfileRes) {
+    rpc Test (TestReq) returns (CharactersRes) {
     }
 }
 

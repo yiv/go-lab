@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"net/http"
 	"io/ioutil"
 	"os"
@@ -22,9 +23,7 @@ var (
 func main() {
 	flag.Parse()
 	logger = log.NewLogfmtLogger(os.Stdout)
-	for {
-		GetYouStarRoomList()
-	}
+	TestGet()
 }
 
 func SetHeader() {
@@ -83,4 +82,27 @@ func GetYouStarRoomList() {
 	}
 	wg.Wait()
 	level.Info(logger).Log("Done:", time.Now().Sub(start))
+}
+
+func TestGet()  {
+	
+	codes := map[int]int{}
+	seconds := map[int64]int{}
+	st := time.Now()
+	for i := 0; i < 1000; i++{
+		start := time.Now()
+		resp, err := http.Get("https://xms-dev-1251001060.file.myqcloud.com/2019/8/1565964059148/book_main.json")
+		if err != nil {
+			_= level.Error(logger).Log("err", err.Error())
+		}else{
+			codes[resp.StatusCode]++
+		}
+		used := time.Now().Sub(start).Nanoseconds() / 1000000
+		
+		seconds[used]++
+	}
+	
+	fmt.Printf("%#v \n", codes)
+	fmt.Printf("%#v \n", seconds)
+	fmt.Println("total time used: ",time.Now().Sub(st))
 }

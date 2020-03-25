@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"log"
 	"net/http"
@@ -9,19 +10,19 @@ import (
 	"time"
 )
 
-const (
-	Host = "127.0.0.1"
-	Port = 80
+var (
+	port = flag.String("port", "80", "port")
 )
 
 func main() {
+	flag.Parse()
 	http.Handle("/", accessControl(http.FileServer(http.Dir("./"))))
-	log.Println("Listening on ", Port)
+	log.Println("Listening on ", *port)
 	go func() {
 		time.Sleep(time.Second)
-		openbrowser(fmt.Sprintf("http://%v:%v", Host, Port))
+		openbrowser(fmt.Sprintf("http://127.0.0.1:%v", *port))
 	}()
-	err := http.ListenAndServe(fmt.Sprintf(":%v", Port), nil)
+	err := http.ListenAndServe(fmt.Sprintf(":%v", *port), nil)
 	if err != nil {
 		log.Fatal("ListenAndServe:", err)
 	}
@@ -44,7 +45,7 @@ func accessControl(h http.Handler) http.Handler {
 
 func openbrowser(url string) {
 	var err error
-	
+
 	switch runtime.GOOS {
 	case "linux":
 		err = exec.Command("xdg-open", url).Start()
@@ -58,5 +59,5 @@ func openbrowser(url string) {
 	if err != nil {
 		log.Println(err)
 	}
-	
+
 }

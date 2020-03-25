@@ -13,13 +13,14 @@ import (
 )
 
 var (
-	port = flag.Int("port", 11000, "The server port")
+	port = flag.Int("port", 9080, "The server port")
 )
 
 type userServer struct {
 }
 
 func (u userServer) GetUserInfo(context context.Context, req *pb.Req) (res *pb.Res, err error) {
+	log.Println(req.Uid)
 	res = &pb.Res{Nick: "edwin"}
 	return
 }

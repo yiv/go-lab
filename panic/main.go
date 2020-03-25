@@ -7,21 +7,29 @@ import (
 )
 
 func main() {
-	for {
-		TestPanic()
-		time.Sleep(time.Second * 3)
-	}
+	PanicInGoroutine()
+}
+
+func PanicInGoroutine() {
+	errChan := make(chan error)
+	defer recoveryTablePanic()
+	go func() {
+		defer recoveryTablePanic()
+		time.Sleep(time.Second * 5)
+		panic("go panic")
+	}()
+	<-errChan
 }
 
 func TestPanic() {
-	defer  recoveryTablePanic()
+	defer recoveryTablePanic()
 	var err error
 	fmt.Println(err.Error())
 }
 
 func recoveryTablePanic() {
 	if err := recover(); err != nil {
-		fmt.Println(err)
+		fmt.Println("edwin 15", err)
 		fmt.Println("edwin #11", string(debug.Stack()))
 	}
 	return

@@ -7,24 +7,24 @@ import (
 	"os"
 	"sync"
 	"time"
-	
+
 	"github.com/gorilla/websocket"
-	
+
 	"github.com/go-kit/kit/log"
 	"github.com/go-kit/kit/log/level"
 )
 
-var addr = flag.String("addr", "10.72.17.30:10000", "http service address")
+var addr = flag.String("addr", "10.72.17.30:8080", "http service address")
 var logger log.Logger
 var sum int
 
 func main() {
 	flag.Parse()
-	
+
 	logger = log.NewLogfmtLogger(os.Stdout)
 	logger = log.With(logger, "ts", log.DefaultTimestamp)
 	logger = log.With(logger, "caller", log.DefaultCaller)
-	
+
 	wg := sync.WaitGroup{}
 	// Mechanical domain.
 	now := time.Now()
@@ -35,7 +35,7 @@ func main() {
 			client(i)
 		}()
 	}
-	
+
 	wg.Wait()
 	_ = level.Info(logger).Log("sum", sum, "took ", time.Now().Sub(now))
 }
@@ -50,7 +50,7 @@ func client(id int) {
 	}
 	ctx, cancel := context.WithCancel(context.Background())
 	count := 0
-	
+
 	wg.Add(1)
 	go func() {
 		defer wg.Done()
@@ -68,16 +68,16 @@ func client(id int) {
 				}
 				//time.Sleep(time.Second)
 			}
-			
+
 		}
 	}()
-	
+
 	wg.Add(1)
 	go func() {
 		defer func() {
 			wg.Done()
 		}()
-		
+
 		for {
 			select {
 			case <-ctx.Done():
@@ -98,9 +98,9 @@ func client(id int) {
 			}
 		}
 	}()
-	
+
 	wg.Wait()
-	
+
 	_ = c.SetWriteDeadline(time.Now().Add(time.Second * 10))
 	_ = c.WriteMessage(websocket.CloseMessage, websocket.FormatCloseMessage(websocket.CloseNormalClosure, ""))
 	time.Sleep(time.Second * 10)

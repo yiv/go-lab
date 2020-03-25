@@ -11,6 +11,10 @@ func main() {
 	fmt.Println(b)
 
 }
+
+func test3() {
+
+}
 func test1(a int) {
 	a++
 }

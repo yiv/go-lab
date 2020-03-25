@@ -6,7 +6,15 @@ import (
 )
 
 func main() {
-	NilArray()
+	NullInArray()
+}
+
+func NullInArray() {
+	s := `[null]`
+	d := []int64{}
+	err := json.Unmarshal([]byte(s), &d)
+	fmt.Println(err)
+	fmt.Println(d)
 }
 
 func js2structWithinMap() {
@@ -88,4 +96,12 @@ func NilArray() {
 
 	//ary3 := []interface{}{}
 
+}
+
+func marshalUrl() {
+	var x = struct {
+		Url string
+	}{Url: "http://www.baidu.com?xxx=5&yyy=6"}
+	d, _ := json.Marshal(x)
+	fmt.Println(string(d))
 }

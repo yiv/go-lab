@@ -22,10 +22,11 @@ import (
 )
 
 var (
-	webSocketAddr = flag.String("websocket.addr", ":999", "game agent webSocket address")
+	webSocketAddr = flag.String("websocket.addr", ":4314", "game agent webSocket address")
 	sum           = 0
+	logger        log.Logger
+	mtx           sync.Mutex
 )
-var logger log.Logger
 
 type Message struct {
 	MType   int
@@ -48,11 +49,44 @@ func main() {
 		errc <- fmt.Errorf("%s", <-c)
 	}()
 	go func() {
+		for {
+			level.Info(logger).Log("sum", sum)
+			time.Sleep(time.Second * 3)
+		}
+
+	}()
+	go func() {
 		m := http.NewServeMux()
-		m.HandleFunc("/ws", webSocketServerStd)
+		m.HandleFunc("/ws", webSocketWaitToRead)
 		errc <- http.ListenAndServe(*webSocketAddr, m)
 	}()
 	level.Info(logger).Log("end", <-errc)
+}
+
+func updateSum(i int) {
+	mtx.Lock()
+	sum += i
+	mtx.Unlock()
+}
+
+func webSocketWaitToRead(w http.ResponseWriter, r *http.Request) {
+	defer updateSum(-1)
+	var upgrader = websocket.Upgrader{} // use default options
+	c, err := upgrader.Upgrade(w, r, nil)
+	if err != nil {
+		level.Error(logger).Log("err", err.Error())
+		return
+	}
+	updateSum(1)
+	for {
+		c.SetReadDeadline(time.Now().Add(time.Hour * 10))
+		_, _, err := c.ReadMessage()
+		if err != nil {
+			level.Error(logger).Log("err", err.Error())
+			return
+		}
+	}
+
 }
 
 func webSocketServerStd(w http.ResponseWriter, r *http.Request) {
@@ -111,26 +145,3 @@ func webSocketServerStd(w http.ResponseWriter, r *http.Request) {
 	time.Sleep(time.Second * 10)
 	c.Close()
 }
-
-//func webSocketServer(w http.ResponseWriter, r *http.Request) {
-//	fmt.Println("webSocketServer new client")
-//	conn, err := websocket.NewWebsocketServerConn(w, r)
-//	if err != nil {
-//		return
-//	}
-//	//conn.SetReadDeadline(time.Now().Add(15 * time.Second))
-//	for {
-//		//bytes, err := ioutil.ReadAll(conn)
-//
-//		buf := make([]byte, 20)
-//
-//		n, err := conn.Read(buf)
-//		if err != nil {
-//			fmt.Println("webSocket read err ", err)
-//			return
-//		}
-//		fmt.Printf("webSocket read  %d byte, buf = %v", n, buf)
-//		conn.Write([]byte("hello "))
-//	}
-//
-//}

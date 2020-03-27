@@ -1,17 +1,15 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"net"
-	"io/ioutil"
-	"fmt"
-	"time"
 )
 
 func main() {
 	// Listen on TCP port 2000 on all available unicast and
 	// anycast IP addresses of the local system.
-	l, err := net.Listen("tcp", "127.0.0.1:8000")
+	l, err := net.Listen("tcp", "127.0.0.1:4315")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -29,14 +27,24 @@ func main() {
 	}
 }
 
-func handle(conn net.Conn)  {
-	conn.SetDeadline(time.Now().Add(time.Second*2))
-	r ,err := ioutil.ReadAll(conn)
-	if err != nil {
-		fmt.Println(err)
-		conn.Close()
-		return
+func handle(conn net.Conn) {
+	log.Println("new connection")
+	for {
+		msg := make([]byte, 4086)
+		n, err := conn.Read(msg)
+		if err != nil {
+			fmt.Println(err)
+			conn.Close()
+			return
+		}
+
+		log.Println("receive ", n, "msg", string(msg))
+
+		_, err = conn.Write(msg)
+		if err != nil {
+			log.Println(err.Error())
+			return
+		}
 	}
 
-	fmt.Printf("%s",r)
 }

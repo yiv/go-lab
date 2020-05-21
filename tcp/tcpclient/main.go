@@ -76,34 +76,33 @@ func echo(id int) {
 	)
 
 	log.Println("open", id, "sum ", sum)
-	for i := 1; i < *round; i++ {
-		msg := []byte(fmt.Sprintf("id= %v, %v", id, time.Now().Format("2006-01-02 15:04:05 +0000 UTC")))
-
-		_, err = conn.Write(msg)
+	send := []byte("abcdefghijklmnopqrstuvwxyz123456abcdefghijklmnopqrstuvwxyz123456")
+	for i := 0; i < *round; i++ {
+		_, err = conn.Write(send)
 		if err != nil {
 			log.Error(err.Error())
 			return
 		}
 
-		log.Println("send ", string(msg))
-		msg = make([]byte, 4086)
-		n, err := conn.Read(msg)
+		//log.Println("send ", string(msg))
+		receive := make([]byte, 64)
+		_, err := conn.Read(receive)
 		//msg, err = ioutil.ReadAll(conn)
 		if err != nil {
 			log.Error(err.Error())
 			return
 		}
 
-		log.Println("receive", n, "msg", string(msg))
+		//log.Println("receive", n, "msg", string(msg))
 
-		bytes += len(msg)
+		bytes += len(receive)
 		if *freq > 0 {
 			time.Sleep(time.Second * time.Duration(*freq))
 		}
 
 	}
 
-	log.Println("id", id, "round", *round, "bytes ", bytes, "time", time.Now().Sub(st))
+	log.Println("id", id, "round", *round, "bytes", bytes, "time", time.Now().Sub(st))
 }
 
 func test() {

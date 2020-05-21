@@ -1,14 +1,14 @@
 package mongo
 
 import (
+	"context"
 	"database/sql"
 	"fmt"
 	"github.com/go-kit/kit/log/level"
 	"time"
-	"context"
 
-	"github.com/mongodb/mongo-go-driver/mongo"
-	"github.com/mongodb/mongo-go-driver/mongo/readpref"
+	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/readpref"
 
 	"github.com/go-kit/kit/log"
 )
@@ -61,5 +61,3 @@ func (r *MongoRepo) FindUserById(uid string) (user *ucenter.User, err error) {
 	}
 	return user, nil
 }
-
-

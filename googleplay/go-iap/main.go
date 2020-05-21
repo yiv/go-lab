@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/dogenzaka/go-iap/playstore"
+	"github.com/awa/go-iap/playstore"
 
 	"io/ioutil"
 	"log"

@@ -5,11 +5,11 @@ import (
 )
 
 func main() {
-	distinct()
+	getLen()
 }
 
 func getLen() {
-	str := "你是ab魔鬼还是天使 and"
+	str := "abcdefghijklmnopqrstuvwxyz123456abcdefghijklmnopqrstuvwxyz123456"
 	fmt.Println("len(str) ", len(str))
 	fmt.Println("len(rune) ", len([]rune(str)))
 	fmt.Println("3 rune ", string([]rune(str)[0:3]))
